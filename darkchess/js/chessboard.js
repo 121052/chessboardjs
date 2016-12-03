@@ -142,6 +142,18 @@ function fenToObj(fen) {
     return position;
 }
 
+function objToFenDark(obj) {
+
+    if (validPositionObject(obj) !== true) {
+        return false;
+    }
+
+    var fen = '';
+
+    var currentRow = 8;
+
+}
+
 // position object to FEN string
 // returns false if the obj is not a valid position object
 function objToFen(obj) {

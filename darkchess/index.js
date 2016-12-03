@@ -3,26 +3,30 @@ $(document).ready(function() {
     var game = new Chess();
 
     var onDragStart = function(source, piece, position, orientation) {
-        if (game.game_over() === true ||
-            (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-            (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+        console.group('On Move');
+        if (game.game_over() === true) {
+            console.log('GAME OVER?');
             return false;
         }
     };
 
     var onDrop = function(source, target) {
+
         var move = game.move({
             from: source,
             to: target,
             promotion: 'q'
         });
+        console.groupEnd();
 
         if (move === null) return 'snapback';
         updateStatus();
     };
 
     var onSnapEnd = function() {
-        board.position(game.fen());
+        var isDark = true;
+        var fen = game.fen(isDark);
+        board.position(fen);
     };
 
     var updateStatus = function() {
@@ -31,8 +35,8 @@ $(document).ready(function() {
         var moveColor = 'White';
         if (game.turn() === 'b') moveColor = 'Black';
 
-        if (game.in_checkmate() === true) {
-            status = 'Game over, ' + moveColor + ' is in checkmate.';
+        if (game.king_captured() === true) {
+            status = 'Game over, ' + moveColor + ' lost its king!';
         } else if (game.in_draw() === true) {
             status = 'Game over, drawn position';
         } else {
@@ -43,7 +47,8 @@ $(document).ready(function() {
             }
         }
 
-        //statusElement.html(status);
+        var statusElement = $('#status');
+        statusElement.html(status);
     };
 
     var config = {
