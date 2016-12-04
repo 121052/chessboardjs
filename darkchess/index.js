@@ -3,9 +3,7 @@ $(document).ready(function() {
     var game = new Chess();
 
     var onDragStart = function(source, piece, position, orientation) {
-        console.group('On Move');
-        if (game.game_over() === true) {
-            console.log('GAME OVER?');
+        if (game.king_captured() === true) {
             return false;
         }
     };
@@ -17,7 +15,6 @@ $(document).ready(function() {
             to: target,
             promotion: 'q'
         });
-        console.groupEnd();
 
         if (move === null) return 'snapback';
         updateStatus();
